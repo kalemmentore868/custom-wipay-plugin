@@ -40,6 +40,7 @@ final class WC_Wipay_Blocks extends AbstractPaymentMethodType {
                 'title' => $settings['title'] ?? 'WiPay Payment',
                 'description' => $settings['description'] ?? 'Pay securely using WiPay.',
                 'ariaLabel' => $settings['title'] ?? 'WiPay Payment',
+                
             ]) . ';',
             'before'
         );
