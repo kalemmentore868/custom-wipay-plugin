@@ -25,7 +25,7 @@ class WC_Gateway_Wipay extends WC_Payment_Gateway {
         $this->method_title = __( 'WiPay by Hexakode', 'wipay-pay-woo' );
         $this->method_description = __( 'Accept credit/debit card payments via WiPay.', 'wipay-pay-woo' );
         $this->has_fields = false;
-        $this->supports = [ 'products' ];
+        $this->supports = [ 'products', 'subscriptions', 'default', 'virtual' ];
         //$this->icon = plugin_dir_url(__FILE__) . '../assets/wipay-icon.png';
 
         // Load settings
@@ -245,6 +245,11 @@ private function create_wipay_payment_redirect_url( $order ) {
     $customer_email = $order->get_billing_email();
     $customer_name  = $order->get_formatted_billing_full_name();
 
+    if ( ! in_array( $currency, [ 'TTD', 'USD' ] ) ) {
+    wc_add_notice( __( 'Unsupported currency for WiPay. Only TTD or USD is allowed.', 'wipay-pay-woo' ), 'error' );
+    return false;
+}
+
     $response_url = add_query_arg(
         [
             'payment_status' => 'wipay_callback',
@@ -260,7 +265,6 @@ private function create_wipay_payment_redirect_url( $order ) {
         'fee_structure'  => $this->fee_structure ?? 'merchant_absorb',
         'method'         => 'credit_card',
         'order_id'       => $order_id,
-        'currency'       => 'TTD',
         'country_code'  =>  'TT',
         'origin'         => 'WooCommerce-PHP',
         'total'          => $total,

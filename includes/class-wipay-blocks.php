@@ -13,6 +13,10 @@ final class WC_Wipay_Blocks extends AbstractPaymentMethodType {
      
     }
 
+    public function needs_shipping_address() {
+    return false;
+}
+
     public function is_active() {
         $is = $this->gateway && $this->gateway->is_available();
    
@@ -23,7 +27,7 @@ final class WC_Wipay_Blocks extends AbstractPaymentMethodType {
        
         wp_enqueue_script(
             'wc-wipay-blocks-integration',
-            plugins_url('block/wipay-block.js', __DIR__),
+            plugins_url('block/wipay-blockv2.js', __DIR__),
             ['wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-i18n'],
             null,
             true
@@ -51,7 +55,8 @@ final class WC_Wipay_Blocks extends AbstractPaymentMethodType {
         'title' => $settings['title'] ?? 'WiPay Payment',
         'description' => $settings['description'] ?? '',
         'ariaLabel' => $settings['title'] ?? 'WiPay Payment',
-        'supports' => ['products'],
+        'supports' => [ 'products', 'subscriptions', 'default', 'virtual' ],
+    
     ];
 }
 
@@ -59,7 +64,7 @@ final class WC_Wipay_Blocks extends AbstractPaymentMethodType {
 public function enqueue_payment_method_script() {
     wp_enqueue_script(
         'wc-wipay-blocks-integration',
-        plugins_url('block/wipay-block.js', __DIR__),
+        plugins_url('block/wipay-blockv2.js', __DIR__),
         ['wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-i18n'],
         null,
         true

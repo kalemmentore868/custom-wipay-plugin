@@ -51,6 +51,7 @@ add_filter('woocommerce_payment_gateways', function($gateways) {
     return $gateways;
 });
 
+
 add_action('woocommerce_blocks_loaded', function () {
     
     if (! class_exists('WC_Wipay_Blocks')) {
@@ -69,12 +70,25 @@ add_action('woocommerce_blocks_loaded', function () {
     });
 });
 
+add_filter('woocommerce_virtual_and_downloadable_product_payment_gateways', function($gateways) {
+    $gateways[] = 'wipay_by_hexakode';
+    return $gateways;
+});
+
+add_filter('woocommerce_available_payment_gateways', function($gateways) {
+    if (isset($gateways['wipay_by_hexakode'])) {
+        $gateways['wipay_by_hexakode']->supports[] = 'virtual';
+    }
+    return $gateways;
+});
+
 add_action('woocommerce_admin_order_data_after_order_details', function($order) {
     $txn_id = $order->get_meta('_wipay_transaction_id');
     if ($txn_id) {
         echo '<p><strong>WiPay Transaction ID:</strong> ' . esc_html($txn_id) . '</p>';
     }
 });
+
 
 
 

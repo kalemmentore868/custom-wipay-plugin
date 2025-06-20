@@ -16,8 +16,8 @@
         name: "wipay_by_hexakode",
         label: createElement("span", null, settings.title || "WiPay"),
         ariaLabel: settings.ariaLabel || "WiPay",
-        supports: { features: ["products"] },
-        canMakePayment: () => true,
+        supports: ["products", "subscriptions", "default", "virtual"],
+        canMakePayment: () => Promise.resolve(true),
         content: createElement(
           "p",
           null,
